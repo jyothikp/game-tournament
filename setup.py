@@ -10,13 +10,15 @@ if os.path.exists('requirements.txt'):
 
 setup(
     name='game-tournament',
-    version='0.1.0',
+    version='0.10.0',
     description='Get tournament updates',
-    url='git@github.com:jyothikp/game-tournament.git',
+    url='https://github.com/jyothikp/game-tournament',
     author='Jyothi',
     author_email='jyothikp9999@gmail.com',
     license='MIT',
     install_requires=requirements,
     packages=['tournament'],
-    data_files=[('tournament', ['tournament/config.json'])],
+    package_data={
+        'tournament': ['config.json'],
+    },
 )

@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: 'rabbitmq:3.8-management-alpine'
+    container_name: game-rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq
+    hostname: 'my-rabbit'
+    networks:
+      - network
+
+  database:
+    image: mongo
+    restart: always
+    container_name: game-mongo
+    ports:
+    - '27017-27019:27017-27019'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - data-volume:/data/db
+    hostname: 'my-mongodb'
+    networks:
+      - network
+
+  app:
+    build: app
+    container_name: game-app
+    ports:
+      - '5000:5000'
+    networks:
+      - network
+
+  consumer:
+    build: workers
+    container_name: game-consumer
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+
+    networks:
+      - network
+
+networks:
+  network: {}
+
+volumes:
+  data-volume:
+  rabbitmq-volume:

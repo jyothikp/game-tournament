@@ -10,7 +10,7 @@ from threading import Lock
 class Logger(object):
     lock = Lock()
 
-    def __init__(self, domain='esports'):
+    def __init__(self, domain='game'):
         self.domain = domain
         self.logger = self._setup_logger()
 

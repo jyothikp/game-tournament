@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from bson import ObjectId
+from bson.json_util import dumps
 from tournament.exceptions import InvalidDataException
 from tournament.logger import Logger
 from tournament.service import EventMetaService
@@ -66,10 +68,9 @@ class GameInterface:
 
     def get_match(self, match_id):
         Logger().info("get_match_data", action="fetching_match_data_start", match_id=match_id)
-        match = MatchDataService().find_by_id(match_id)
-        event_data = EventMetaService().find_one({'match_id': match['id']})
+        event_data = EventMetaService().find_one({'match_id': ObjectId(match_id)})
         Logger().info("get_match_data", action="fetching_match_data_finished", match_id=match_id)
-        return event_data['raw_data']
+        return event_data['raw_data'] if event_data else {}
 
     def get_matches(self, query):
         match_query = {}
@@ -104,4 +105,4 @@ class GameInterface:
             match_data['teams'] = TeamsDataService().find(query, dict)
             data.append(match_data)
         Logger().info("get_match_data", action="fetched_all_data")
-        return data
+        return dumps(data)
