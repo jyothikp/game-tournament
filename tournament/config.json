@@ -1,0 +1,7 @@
+{
+  "connection": {
+    "rabbit_mq": "amqp://guest:guest@localhost:5672/%2F",
+    "mongodb": "mongodb://root:example@127.0.0.1:27017/",
+    "elasticsearch": ""
+  }
+}
